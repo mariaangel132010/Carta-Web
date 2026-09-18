@@ -1,0 +1,247 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: white;
+  overflow: hidden;
+}
+
+.scene {
+  position: relative;
+  width: 540px;
+  height: 540px;
+}
+
+/* =========================
+   CORAZONES
+   ========================= */
+
+.heart {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: #ff2908;
+  transform: rotate(-45deg);
+  z-index: 1;
+}
+
+.heart::before,
+.heart::after {
+  content: "";
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: #ff2908;
+  border-radius: 50%;
+}
+
+.heart::before {
+  top: -50px;
+  left: 0;
+}
+
+.heart::after {
+  top: 0;
+  left: 50px;
+}
+
+/* Corazón grande izquierdo */
+.heart-1 {
+  width: 112px;
+  height: 112px;
+  left: 105px;
+  top: 92px;
+  transform: rotate(-45deg) scale(1.15);
+}
+
+/* Corazón superior */
+.heart-2 {
+  width: 70px;
+  height: 70px;
+  left: 290px;
+  top: 55px;
+  transform: rotate(-30deg);
+}
+
+/* Corazón derecho */
+.heart-3 {
+  width: 95px;
+  height: 95px;
+  right: 15px;
+  top: 125px;
+  transform: rotate(-45deg);
+}
+
+
+/* =========================
+   SOBRE
+   ========================= */
+
+.envelope {
+  position: absolute;
+  left: 56px;
+  bottom: 62px;
+
+  width: 440px;
+  height: 325px;
+
+  background: white;
+  border: 20px solid #222;
+  border-radius: 40px;
+
+  overflow: hidden;
+  z-index: 5;
+}
+
+/*
+   Triángulo superior del sobre
+*/
+.flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 150px;
+
+  background: white;
+
+  clip-path: polygon(
+    0 0,
+    50% 100%,
+    100% 0
+  );
+
+  z-index: 3;
+}
+
+/*
+   Líneas diagonales
+*/
+.diagonal {
+  position: absolute;
+  height: 20px;
+  background: #222;
+  transform-origin: left center;
+  z-index: 4;
+}
+
+/* diagonal superior izquierda → centro */
+.diagonal-left {
+  width: 275px;
+  left: -5px;
+  top: 5px;
+  transform: rotate(37deg);
+}
+
+/* diagonal superior derecha → centro */
+.diagonal-right {
+  width: 275px;
+  right: -5px;
+  top: 5px;
+  transform-origin: right center;
+  transform: rotate(-37deg);
+}
+
+/*
+   Bordes diagonales inferiores.
+   Se crean con pseudo-elementos.
+*/
+.envelope::before,
+.envelope::after {
+  content: "";
+  position: absolute;
+
+  width: 290px;
+  height: 20px;
+
+  background: #222;
+  top: 185px;
+
+  z-index: 6;
+}
+
+/* izquierda → esquina inferior izquierda */
+.envelope::before {
+  left: -35px;
+  transform: rotate(-43deg);
+  transform-origin: right center;
+}
+
+/* derecha → esquina inferior derecha */
+.envelope::after {
+  right: -35px;
+  transform: rotate(43deg);
+  transform-origin: left center;
+}
+
+
+/* =========================
+   PUNTO CENTRAL DEL SOBRE
+   ========================= */
+
+.letter {
+  position: absolute;
+
+  width: 75px;
+  height: 35px;
+
+  left: 50%;
+  top: 125px;
+
+  transform: translateX(-50%);
+
+  background: #222;
+
+  border-radius: 0 0 50% 50%;
+
+  z-index: 7;
+}
+
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+
+@media (max-width: 600px) {
+
+  .scene {
+    width: 100vw;
+    height: 100vw;
+    max-width: 540px;
+    max-height: 540px;
+  }
+
+  .envelope {
+    width: 82%;
+    height: 60%;
+    left: 10%;
+    bottom: 12%;
+    border-width: 16px;
+    border-radius: 32px;
+  }
+
+  .heart-1 {
+    left: 18%;
+    top: 17%;
+    transform: rotate(-45deg) scale(.85);
+  }
+
+  .heart-2 {
+    left: 52%;
+    top: 10%;
+    transform: rotate(-30deg) scale(.75);
+  }
+
+  .heart-3 {
+    right: 4%;
+    top: 23%;
+    transform: rotate(-45deg) scale(.75);
+  }
+}

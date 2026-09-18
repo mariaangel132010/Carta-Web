@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine Letter - Love Pop-up</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pink-main: #fbcfe8;
+            --pink-dark: #f472b6;
+            --pink-accent: #e11d48;
+            --bg-grid-1: #ffe4e6;
+            --bg-grid-2: #fecdd3;
+            --window-border: #f43f5e;
+            --btn-bg: #fff1f2;
+            --btn-border: #f43f5e;
+            --btn-shadow: #fda4af;
+        }
+
+        body {
+            font-family: 'Press Start 2P', cursive;
+            background: linear-gradient(135deg, #fde2e4 0%, #ffcad4 50%, #b5e2fa 100%);
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        /* Retro Window Container */
+        .retro-window {
+            background-color: #fff0f3;
+            border: 4px solid var(--window-border);
+            border-radius: 16px;
+            box-shadow: 0 15px 30px rgba(225, 29, 72, 0.25), 0 0 0 4px #fff inset;
+            width: 90%;
+            max-width: 440px;
+            position: relative;
+            z-index: 10;
+            overflow: hidden;
+            transition: transform 0.2s ease;
+        }
+
+        /* Title Bar */
+        .title-bar {
+            background: linear-gradient(90deg, #fb7185, #fda4af);
+            padding: 10px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid var(--window-border);
+            color: #881337;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        .window-btn {
+            width: 22px;
+            height: 22px;
+            border: 2px solid #881337;
+            background-color: #fff;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 10px;
+            font-weight: bold;
+            box-shadow: 2px 2px 0px #881337;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-left: 4px;
+            line-height: 1;
+        }
+
+        .window-btn:active {
+            transform: translate(1px, 1px);
+            box-shadow: 1px 1px 0px #881337;
+        }
+
+        /* Decorative Hearts Header */
+        .hearts-bar {
+            background-color: #ffe4e6;
+            padding: 6px;
+            text-align: center;
+            border-bottom: 2px dashed #fda4af;
+            font-size: 14px;
+        }
+
+        /* Inner Gingham / Checkered Body */
+        .window-body {
+            background-color: #fce7f3;
+            background-image: 
+                linear-gradient(90deg, rgba(244, 114, 182, 0.2) 50%, transparent 50%),
+                linear-gradient(rgba(244, 114, 182, 0.2) 50%, transparent 50%);
+            background-size: 24px 24px;
+            padding: 24px 20px 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            min-height: 380px;
+        }
+
+        /* Message Box */
+        .message-title {
+            color: #9f1239;
+            font-size: 15px;
+            line-height: 1.6;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 0px #ffffff;
+        }
+
+        /* Pixel Cat Canvas Container */
+        .cat-container {
+            width: 140px;
+            height: 140px;
+            margin: 10px 0 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        canvas#pixelCat {
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+        }
+
+        /* Retro Buttons Styling */
+        .btn-retro {
+            font-family: 'Press Start 2P', cursive;
+            background-color: var(--btn-bg);
+            color: #9f1239;
+            border: 3px solid var(--btn-border);
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 4px 0px var(--btn-shadow);
+            transition: all 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            outline: none;
+            z-index: 20;
+        }
+
+        .btn-retro:hover {
+            background-color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0px var(--btn-shadow);
+        }
+
+        .btn-retro:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0px var(--btn-shadow);
+        }
+
+        /* Runaway NO Button Position Control */
+        #noBtn {
+            transition: left 0.2s ease, top 0.2s ease;
+        }
+
+        /* Floating background elements */
+        .bg-heart {
+            position: absolute;
+            color: rgba(244, 63, 94, 0.35);
+            font-size: 16px;
+            pointer-events: none;
+            animation: floatUp 8s infinite linear;
+            z-index: 1;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) scale(0.8) rotate(0deg);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-10vh) scale(1.2) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Confetti Hearts Animation */
+        .rain-heart {
+            position: fixed;
+            top: -20px;
+            pointer-events: none;
+            font-size: 20px;
+            z-index: 999;
+            animation: fall 3s linear forwards;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(105vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Success Pulse FX */
+        .celebrate {
+            animation: celebrateBounce 0.6s ease infinite alternate;
+        }
+
+        @keyframes celebrateBounce {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.05); }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="bgHeartsContainer"></div>
+
+    <div class="retro-window" id="windowCard">
+        <!-- Title Bar -->
+        <div class="title-bar">
+            <span>LOVE</span>
+            <div>
+                <button class="window-btn" onclick="playClickSound(); shrinkWindow();">_</button>
+                <button class="window-btn" onclick="playClickSound(); pulseWindow();">□</button>
+                <button class="window-btn" onclick="playClickSound(); closeWindow();">×</button>
+            </div>
+        </div>
+
+        <!-- Heart Icons Bar -->
+        <div class="hearts-bar">
+            <span class="text-rose-500">♥</span>
+            <span class="text-rose-300 mx-2">■</span>
+            <span class="text-rose-500">♥</span>
+            <span class="text-rose-300 mx-2">■</span>
+            <span class="text-rose-500">♥</span>
+        </div>
+
+        <!-- Window Interactive Content Area -->
+        <div class="window-body" id="windowBody">
+            <h1 class="message-title" id="mainTitle">
+                Happy 1 month, my love <span style="font-family: Arial;">♡</span> Still love me?
+            </h1>
+
+            <!-- Pixel Cat Canvas Art -->
+            <div class="cat-container">
+                <canvas id="pixelCat" width="128" height="128"></canvas>
+            </div>
+
+            <!-- Buttons Layout Container -->
+            <div class="w-full flex flex-col items-center justify-center gap-4 mt-2 relative min-h-[110px]" id="buttonArea">
+                <!-- YES Button -->
+                <button id="yesBtn" class="btn-retro">
+                    YES
+                </button>
+
+                <!-- NO Button -->
+                <button id="noBtn" class="btn-retro">
+                    NO
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new AudioContext();
+            }
+        }
+
+        function playClickSound() {
+            try {
+                initAudio();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
+                osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.1); // A5
+
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.1);
+            } catch (e) {
+                // Audio fallback
+            }
+        }
+
+        function playDodgeSound() {
+            try {
+                initAudio();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+                osc.frequency.linearRampToValueAtTime(150, audioCtx.currentTime + 0.08);
+
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.08);
+            } catch (e) {}
+        }
+
+        function playCelebrateSound() {
+            try {
+                initAudio();
+                const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+                notes.forEach((freq, index) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'square';
+                    osc.frequency.value = freq;
+
+                    const startTime = audioCtx.currentTime + (index * 0.08);
+                    gain.gain.setValueAtTime(0.08, startTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.15);
+
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(startTime);
+                    osc.stop(startTime + 0.15);
+                });
+            } catch (e) {}
+        }
+
+        const canvas = document.getElementById('pixelCat');
+        const ctx = canvas.getContext('2d');
+        let catState = 'normal'; // 'normal' | 'happy'
+
+        // Grid matrix definition for pixel cat holding a heart (16x16)
+        // 0: transparent, 1: black body, 2: inner ear/snout white, 3: red heart, 4: eye glow
+        const catSpriteNormal = [
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0],
+            [0,1,2,1,0,0,0,0,0,0,0,0,1,2,1,0],
+            [0,1,2,1,1,1,1,1,1,1,1,1,1,2,1,0],
+            [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
+            [0,1,1,4,1,1,1,1,1,1,1,4,1,1,1,0],
+            [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
+            [0,1,1,1,1,1,2,2,2,2,1,1,1,1,1,0],
+            [0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0],
+            [0,0,0,1,3,3,1,1,1,1,3,3,1,0,0,0],
+            [0,0,0,1,3,3,3,3,3,3,3,3,1,0,0,0],
+            [0,0,0,1,1,3,3,3,3,3,3,1,1,0,0,0],
+            [0,0,0,0,1,1,3,3,3,3,1,1,0,0,0,0],
+            [0,0,0,0,0,1,1,3,3,1,1,0,0,0,0,0],
+            [0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+        ];
+
+        const catSpriteHappy = [
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0],
+            [0,1,2,1,0,0,0,0,0,0,0,0,1,2,1,0],
+            [0,1,2,1,1,1,1,1,1,1,1,1,1,2,1,0],
+            [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
+            [0,1,1,2,1,1,1,1,1,1,1,2,1,1,1,0], // ^ ^ happy eyes
+            [0,1,2,1,2,1,1,1,1,1,2,1,2,1,1,0],
+            [0,1,1,1,1,1,2,2,2,2,1,1,1,1,1,0],
+            [0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0],
+            [0,0,0,1,3,3,1,1,1,1,3,3,1,0,0,0],
+            [0,0,0,1,3,3,3,3,3,3,3,3,1,0,0,0],
+            [0,0,0,1,1,3,3,3,3,3,3,1,1,0,0,0],
+            [0,0,0,0,1,1,3,3,3,3,1,1,0,0,0,0],
+            [0,0,0,0,0,1,1,3,3,1,1,0,0,0,0,0],
+            [0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+        ];
+
+        const colors = {
+            1: '#1e1b18', // Black cat body
+            2: '#ffffff', // White details
+            3: '#e11d48', // Red heart
+            4: '#ffffff'  // Eye sparkle
+        };
+
+        function drawPixelCat(sprite) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const pixelSize = canvas.width / 16;
+
+            for (let row = 0; row < 16; row++) {
+                for (let col = 0; col < 16; col++) {
+                    const colorKey = sprite[row][col];
+                    if (colorKey !== 0) {
+                        ctx.fillStyle = colors[colorKey];
+                        ctx.fillRect(col * pixelSize, row * pixelSize, pixelSize, pixelSize);
+                    }
+                }
+            }
+        }
+
+        // Initial render
+        drawPixelCat(catSpriteNormal);
+
+        function createBackgroundHearts() {
+            const container = document.getElementById('bgHeartsContainer');
+            const heartsCount = 15;
+            for (let i = 0; i < heartsCount; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'bg-heart';
+                heart.innerHTML = '♥';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (5 + Math.random() * 6) + 's';
+                heart.style.animationDelay = (Math.random() * 5) + 's';
+                heart.style.fontSize = (12 + Math.random() * 16) + 'px';
+                container.appendChild(heart);
+            }
+        }
+        createBackgroundHearts();
+
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const windowBody = document.getElementById('windowBody');
+        const mainTitle = document.getElementById('mainTitle');
+        let yesScale = 1;
+
+        function dodgeNoButton() {
+            playDodgeSound();
+
+            // Set absolute position inside window container if first dodge
+            if (noBtn.style.position !== 'absolute') {
+                noBtn.style.position = 'absolute';
+            }
+
+            const bodyRect = windowBody.getBoundingClientRect();
+            const btnRect = noBtn.getBoundingClientRect();
+
+            // Calculate safe boundary coordinates
+            const maxX = bodyRect.width - btnRect.width - 20;
+            const maxY = bodyRect.height - btnRect.height - 30;
+
+            const newX = Math.max(10, Math.floor(Math.random() * maxX));
+            const newY = Math.max(10, Math.floor(Math.random() * maxY));
+
+            noBtn.style.left = `${newX}px`;
+            noBtn.style.top = `${newY}px`;
+
+            // Make YES button grow bigger each dodge
+            yesScale += 0.08;
+            yesBtn.style.transform = `scale(${yesScale})`;
+        }
+
+        // Attach mouseover & touchstart events for mobile and desktop dodge
+        noBtn.addEventListener('mouseenter', dodgeNoButton);
+        noBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            dodgeNoButton();
+        });
+
+        yesBtn.addEventListener('click', () => {
+            playCelebrateSound();
+            
+            // Change message
+            mainTitle.innerHTML = "Yippeee! ❤️<br><span style='font-size: 11px; color:#be123c; margin-top: 8px; display:inline-block;'>I love you so much!</span>";
+            
+            // Hide NO button, center YES button with custom style
+            noBtn.style.display = 'none';
+            yesBtn.style.transform = 'scale(1.2)';
+            yesBtn.innerHTML = '💖 FOREVER 💖';
+            
+            // Render Happy Cat Pixel Art
+            drawPixelCat(catSpriteHappy);
+
+            // Add bounce effect to card
+            document.getElementById('windowCard').classList.add('celebrate');
+
+            // Trigger Heart Rain Confetti
+            spawnHeartRain();
+        });
+
+        function spawnHeartRain() {
+            for (let i = 0; i < 40; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'rain-heart';
+                    heart.innerHTML = ['♥', '💖', '💕', '💗'][Math.floor(Math.random() * 4)];
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    heart.style.animationDuration = (2 + Math.random() * 2) + 's';
+                    heart.style.fontSize = (16 + Math.random() * 20) + 'px';
+                    document.body.appendChild(heart);
+
+                    setTimeout(() => heart.remove(), 4000);
+                }, i * 60);
+            }
+        }
+
+        function shrinkWindow() {
+            const card = document.getElementById('windowCard');
+            card.style.transform = card.style.transform === 'scale(0.95)' ? 'scale(1)' : 'scale(0.95)';
+        }
+
+        function pulseWindow() {
+            const card = document.getElementById('windowCard');
+            card.style.transform = 'scale(1.05)';
+            setTimeout(() => {
+                card.style.transform = 'scale(1)';
+            }, 200);
+        }
+
+        function closeWindow() {
+            const card = document.getElementById('windowCard');
+            card.style.opacity = '0';
+            card.style.transform = 'scale(0.8)';
+            setTimeout(() => {
+                card.style.opacity = '1';
+                card.style.transform = 'scale(1)';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
